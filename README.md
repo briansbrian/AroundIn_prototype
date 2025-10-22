@@ -19,3 +19,12 @@ View your app in AI Studio: https://ai.studio/apps/drive/1Bifoa_6Y8OVUQEO5Oxc9Tm
 3. Run the app:
    `npm run dev`
 "# AroundIn_prototype" 
+
+
+echo "# AroundIn_prototype" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/briansbrian/AroundIn_prototype.git
+git push -u origin main
