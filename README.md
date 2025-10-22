@@ -2,11 +2,11 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Run and deploy your AI Studio app
+# AroundIn_prototype
 
-This contains everything you need to run your app locally.
+Contains the app demo for AroundIn, a location-based AI assistant that helps users explore and discover new places around them using Google Maps and Gemini API.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1Bifoa_6Y8OVUQEO5Oxc9TmmxaU43kN9I
+View the app in: https://ai.studio/apps/drive/1Bifoa_6Y8OVUQEO5Oxc9TmmxaU43kN9I
 
 ## Run Locally
 
