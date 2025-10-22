@@ -35,7 +35,7 @@ const SalesChart = () => (
 );
 
 const StatCard: React.FC<{ title: string; value: string; change?: string; changeType?: 'increase' | 'decrease' }> = ({ title, value, change, changeType }) => (
-    <div className="bg-green-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-4 rounded-lg shadow">
+    <div className="bg-green-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-4 rounded-lg shadow">
         <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
         <p className="text-2xl font-bold text-gray-800 dark:text-gray-200">{value}</p>
         {change && (
@@ -54,8 +54,8 @@ const InventoryManager: React.FC<{initialProducts: Product[]}> = ({initialProduc
     };
 
     return (
-        <div className="bg-green-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-6 rounded-lg shadow">
-            <h3 className="text-xl font-bold mb-4 dark:text-gray-200">Inventory Management</h3>
+        <div className="bg-green-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-6 rounded-lg shadow">
+            <h3 className="text-base md:text-lg font-bold mb-4 dark:text-gray-200">Inventory Management</h3>
             <div className="overflow-x-auto">
                 <table className="w-full text-left">
                     <thead>
@@ -95,8 +95,8 @@ const OrderList: React.FC = () => {
     ];
 
     return (
-        <div className="bg-green-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-6 rounded-lg shadow">
-            <h3 className="text-xl font-bold mb-4 dark:text-gray-200">Recent Orders</h3>
+        <div className="bg-green-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-6 rounded-lg shadow">
+            <h3 className="text-base md:text-lg font-bold mb-4 dark:text-gray-200">Recent Orders</h3>
             <div className="space-y-4">
                 {orders.map(order => (
                     <div key={order.id} className="flex justify-between items-center p-3 bg-gray-500/10 dark:bg-gray-200/10 rounded-lg">
@@ -142,8 +142,8 @@ const VendorDashboard: React.FC<{ shop: Shop; onReset: () => void }> = ({ shop, 
         <div className="space-y-6 animate-fade-in">
             <div className="flex justify-between items-start">
                 <div>
-                    <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200">Your Business Health</h2>
-                    <p className="text-gray-500 dark:text-gray-400 mt-1">An overview of your performance for {shop.name}</p>
+                    <h2 className="text-base md:text-lg font-bold text-gray-800 dark:text-gray-200">Your Business Health</h2>
+                    <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1">An overview of your performance for {shop.name}</p>
                 </div>
                 <button onClick={onReset} className="flex items-center gap-2 text-sm bg-gray-500/20 hover:bg-gray-500/30 dark:bg-gray-200/10 dark:hover:bg-gray-200/20 backdrop-blur-md text-gray-700 dark:text-gray-200 font-semibold py-2 px-4 rounded-lg transition-colors">
                     <ArrowPathIcon className="w-5 h-5" />
@@ -159,7 +159,7 @@ const VendorDashboard: React.FC<{ shop: Shop; onReset: () => void }> = ({ shop, 
 
             <LowStockAlert />
 
-            <div className="bg-green-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-6 rounded-lg shadow">
+            <div className="bg-green-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-6 rounded-lg shadow">
                 <SalesChart />
                 <div className="text-center mt-4">
                     <button className="bg-green-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-600 transition-colors">
@@ -179,11 +179,11 @@ const VendorDashboard: React.FC<{ shop: Shop; onReset: () => void }> = ({ shop, 
 const TemplateCard: React.FC<{ template: ShopTemplate; onCreate: () => void; }> = ({ template, onCreate }) => {
     const srcBase = template.image.replace('-1024.webp', '');
     return (
-    <div className="bg-green-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-md overflow-hidden flex flex-col hover:shadow-xl transition-shadow duration-300">
+    <div className="bg-green-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-md overflow-hidden flex flex-col hover:shadow-xl transition-shadow duration-300">
         <OptimizedImage srcBase={srcBase} alt={template.name} className="w-full h-40 object-cover" />
         <div className="p-4 flex flex-col flex-grow">
-            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200">{template.name}</h3>
-            <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm flex-grow">{template.description}</p>
+            <h3 className="text-sm md:text-base font-bold text-gray-800 dark:text-gray-200">{template.name}</h3>
+            <p className="text-gray-600 dark:text-gray-400 mt-2 text-xs flex-grow">{template.description}</p>
         </div>
         <div className="p-4 pt-0">
             <button 
@@ -201,8 +201,8 @@ const ShopCreator: React.FC<{ onCreateShop: (template: ShopTemplate) => void }> 
     return (
         <div className="space-y-6 animate-fade-in">
             <div className="text-center">
-                <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200">Create Your Digital Storefront</h2>
-                <p className="text-gray-500 dark:text-gray-400 mt-2">Choose a template to get started in seconds. It's pre-filled with products to help you go live faster.</p>
+                <h2 className="text-base md:text-lg font-bold text-gray-800 dark:text-gray-200">Create Your Digital Storefront</h2>
+                <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-2">Choose a template to get started in seconds. It's pre-filled with products to help you go live faster.</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
                 {SHOP_TEMPLATES.map(template => (

@@ -34,7 +34,7 @@ const App: React.FC = () => {
   }, [menuRef]);
 
   const Header = () => (
-    <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-md sticky top-0 z-50">
+    <header className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-md sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <a href="/" className="cursor-pointer">
@@ -50,7 +50,7 @@ const App: React.FC = () => {
               <Bars3Icon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
             </button>
             {isMenuOpen && (
-              <div className="absolute top-full right-0 mt-2 w-48 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-lg py-2 animate-fade-in-fast">
+              <div className="absolute top-full right-0 mt-2 w-48 bg-white/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-lg py-2 animate-fade-in-fast">
                 <a href="#" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Terms of Service</a>
                 <a href="#" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Documentation</a>
                 <a href="#" className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">Help Centre</a>

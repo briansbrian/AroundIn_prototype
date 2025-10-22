@@ -5,9 +5,10 @@ import { findNearbyPlaces } from '../services/geminiService';
 import { MOCK_SHOPS } from '../constants';
 import LoadingSpinner from './common/LoadingSpinner';
 import OptimizedImage from './common/OptimizedImage';
-import { MagnifyingGlassIcon, StarIcon } from './common/Icons';
+import { MagnifyingGlassIcon, StarIcon, XMarkIcon, BookmarkIcon, BookmarkSquareIcon } from './common/Icons';
 import ShopPortfolio from './ShopPortfolio';
 import type { Shop, GroundingChunk, GeoLocation } from '../types';
+import { searchLocalData, type LocalSearchResult, calculateDistance } from '../lib/searchUtils';
 
 const MapPlaceholder: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
     if (isLoading) {
@@ -20,13 +21,14 @@ const MapPlaceholder: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
     }
 
     return (
-        <div className="relative h-64 md:h-96 w-full rounded-lg shadow-lg overflow-hidden">
+        <div className="relative h-64 md:h-96 w-full rounded-lg shadow-lg overflow-hidden backdrop-blur-sm">
             <OptimizedImage 
                 srcBase="/images/optimized/mainbar"
                 alt="Map of the local area" 
                 sizes="100vw"
-                className="w-full h-full object-cover" 
+                className="w-full h-full object-cover opacity-75 brightness-110" 
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none"></div>
         </div>
     );
 };
@@ -50,7 +52,7 @@ const ShopCard: React.FC<{
 
     if (isFeatured) {
         return (
-            <div className="bg-teal-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col md:flex-row h-full">
+            <div className="bg-teal-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col md:flex-row h-full">
                 <div className="md:w-1/2 relative">
                     <OptimizedImage srcBase={srcBase} alt={shop.name} className="w-full h-48 md:h-full object-cover" />
                 </div>
@@ -59,7 +61,7 @@ const ShopCard: React.FC<{
                       <div className="flex justify-between items-start">
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-6 bg-yellow-400 rounded-full"></div>
-                            <h3 className="font-bold text-xl text-gray-800 dark:text-gray-200">{shop.name}</h3>
+                            <h3 className="font-bold text-sm md:text-base text-gray-800 dark:text-gray-200">{shop.name}</h3>
                         </div>
                         <span className={`text-xs font-semibold px-2 py-1 rounded-full ${categoryStyles[shop.category]}`}>{shop.category}</span>
                       </div>
@@ -96,11 +98,11 @@ const ShopCard: React.FC<{
     }
 
     return (
-        <div className="bg-teal-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
+        <div className="bg-teal-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
             <OptimizedImage srcBase={srcBase} alt={shop.name} className="w-full h-32 object-cover" />
             <div className="p-4 flex-grow">
                 <div className="flex justify-between items-start">
-                    <h3 className="font-bold text-lg text-gray-800 dark:text-gray-200">{shop.name}</h3>
+                    <h3 className="font-bold text-xs md:text-sm text-gray-800 dark:text-gray-200">{shop.name}</h3>
                     <span className={`text-xs font-semibold px-2 py-1 rounded-full ${categoryStyles[shop.category]}`}>{shop.category}</span>
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{shop.distance} &middot; {shop.rating} ★</p>
@@ -146,15 +148,132 @@ const CustomerView: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apiResponse, setApiResponse] = useState<{ text: string; groundingChunks: GroundingChunk[] } | null>(null);
+  const [localSearchResults, setLocalSearchResults] = useState<LocalSearchResult[]>([]);
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
+  const [savedShops, setSavedShops] = useState<Set<string>>(new Set());
   const [activeFilter, setActiveFilter] = useState<'all' | 'recommended' | Shop['category']>('all');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+
+  // Get filtered suggestions based on current input
+  const suggestions = MOCK_SHOPS.filter(shop =>
+    shop.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    shop.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    shop.products.some(product =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  ).slice(0, 5); // Limit to 5 suggestions
+
+  // Handle input change with suggestions
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    setShowSuggestions(value.length > 0 && suggestions.length > 0);
+    setSelectedSuggestionIndex(-1);
+  };
+
+  // Handle keyboard navigation
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showSuggestions || suggestions.length === 0) {
+      if (e.key === 'Enter') {
+        handleSearch();
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev =>
+          prev < suggestions.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => prev > 0 ? prev - 1 : -1);
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedSuggestionIndex >= 0) {
+          handleSuggestionSelect(suggestions[selectedSuggestionIndex]);
+        } else {
+          handleSearch();
+        }
+        break;
+      case 'Escape':
+        setShowSuggestions(false);
+        setSelectedSuggestionIndex(-1);
+        break;
+    }
+  };
+
+  // Handle saving/unsaving shops
+  const handleSaveShop = (shopId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSavedShops(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(shopId)) {
+        newSet.delete(shopId);
+      } else {
+        newSet.add(shopId);
+      }
+      return newSet;
+    });
+  };
+
+  // Handle suggestion selection
+  const handleSuggestionSelect = (shop: Shop) => {
+    setSearchQuery(shop.name);
+    setShowSuggestions(false);
+    setSelectedSuggestionIndex(-1);
+    setSelectedShop(shop);
+  };
+
+  // Handle clicking outside to close suggestions
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchInputRef.current &&
+        !searchInputRef.current.contains(event.target as Node) &&
+        suggestionsRef.current &&
+        !suggestionsRef.current.contains(event.target as Node)
+      ) {
+        setShowSuggestions(false);
+        setSelectedSuggestionIndex(-1);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSearch = useCallback(async () => {
-    if (!searchQuery || !location) return;
+    if (!searchQuery.trim()) return;
+
     setIsLoading(true);
     setApiResponse(null);
-    const result = await findNearbyPlaces(searchQuery, location);
-    setApiResponse(result);
+    setLocalSearchResults([]);
+    setShowSuggestions(false);
+    setSelectedSuggestionIndex(-1);
+
+    // Always perform local search
+    const localResults = searchLocalData(searchQuery, location || undefined);
+    setLocalSearchResults(localResults);
+
+    // Perform external API search if location is available
+    if (location) {
+      try {
+        const result = await findNearbyPlaces(searchQuery, location);
+        setApiResponse(result);
+      } catch (error) {
+        console.error('External search failed:', error);
+        // Continue with local results only
+      }
+    }
+
     setIsLoading(false);
   }, [searchQuery, location]);
 
@@ -167,6 +286,14 @@ const CustomerView: React.FC = () => {
     setSelectedShop(shop);
   }, []);
 
+
+  const handleClearSearch = useCallback(() => {
+    setSearchQuery('');
+    setLocalSearchResults([]);
+    setApiResponse(null);
+    setShowSuggestions(false);
+    setSelectedSuggestionIndex(-1);
+  }, []);
 
   const handleBackToDiscovery = () => {
       setSelectedShop(null);
@@ -185,50 +312,153 @@ const CustomerView: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200">Find What's Around You</h2>
-        <p className="text-gray-500 dark:text-gray-400 mt-2">Discover local shops and services in your neighborhood.</p>
+        <h2 className="text-base md:text-lg font-bold text-gray-800 dark:text-gray-200">Find Shops & Products</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Search local shops, products, and services in your area.</p>
       </div>
 
       <div className="sticky top-[70px] bg-transparent z-10 py-4">
         <div className="relative max-w-2xl mx-auto">
           <input
+            ref={searchInputRef}
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-            placeholder="e.g., 'best place for coffee' or 'electronics repair'"
-            className="w-full pl-10 pr-20 py-3 border border-gray-300/50 dark:border-gray-600/50 bg-teal-50/60 dark:bg-gray-700/60 backdrop-blur-md dark:text-gray-200 rounded-full shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:placeholder-gray-400"
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            placeholder="Search shops, products, or services..."
+            className="w-full pl-10 pr-20 py-2 md:py-3 border border-gray-300/50 dark:border-gray-600/50 bg-teal-50/90 dark:bg-gray-700/90 backdrop-blur-md dark:text-gray-200 rounded-full shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:placeholder-gray-400 text-sm md:text-base"
           />
           <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400" />
+          {(localSearchResults.length > 0 || apiResponse) && (
+            <button
+              onClick={handleClearSearch}
+              className="absolute right-12 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-600"
+            >
+              <XMarkIcon className="w-4 h-4 text-gray-400" />
+            </button>
+          )}
           <button
             onClick={handleSearch}
-            disabled={isLoading || geoLoading}
-            className="absolute right-2 top-1/2 -translate-y-1/2 bg-teal-500 text-white font-semibold px-4 py-2 rounded-full hover:bg-teal-600 disabled:bg-gray-400 transition-colors"
+            disabled={isLoading}
+            className="absolute right-2 top-1/2 -translate-y-1/2 bg-teal-500 text-white font-semibold px-3 md:px-4 py-1.5 md:py-2 rounded-full hover:bg-teal-600 disabled:bg-gray-400 transition-colors text-sm md:text-base"
           >
             {isLoading ? <LoadingSpinner className="w-5 h-5" /> : 'Search'}
           </button>
+
+          {/* Suggestions Dropdown */}
+          {showSuggestions && suggestions.length > 0 && (
+            <div
+              ref={suggestionsRef}
+              className="absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-lg max-h-64 overflow-y-auto z-20"
+            >
+              {suggestions.map((shop, index) => (
+                <button
+                  key={shop.id}
+                  onClick={() => handleSuggestionSelect(shop)}
+                  className={`w-full text-left px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors flex items-center justify-between ${
+                    index === selectedSuggestionIndex ? 'bg-teal-50 dark:bg-teal-900/20' : ''
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div>
+                      <p className="font-medium text-gray-900 dark:text-gray-100">{shop.name}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{shop.category}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {location && (
+                      <p className="text-sm text-teal-600 dark:text-teal-400">
+                        {(() => {
+                          const distance = calculateDistance(
+                            location.latitude,
+                            location.longitude,
+                            shop.location.latitude,
+                            shop.location.longitude
+                          );
+                          return distance < 1000 ? `${Math.round(distance)}m` : `${(distance / 1000).toFixed(1)}km`;
+                        })()}
+                      </p>
+                    )}
+                    <button
+                      onClick={(e) => handleSaveShop(shop.id, e)}
+                      className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                    >
+                      {savedShops.has(shop.id) ? (
+                        <BookmarkSquareIcon className="w-4 h-4 text-teal-500" />
+                      ) : (
+                        <BookmarkIcon className="w-4 h-4 text-gray-400 hover:text-teal-500" />
+                      )}
+                    </button>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         {geoError && <p className="text-center text-red-500 text-sm mt-2">Geolocation error: {geoError}. Please enable location services.</p>}
       </div>
 
-      {apiResponse && (
-        <div className="bg-teal-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-6 rounded-lg shadow-md max-w-4xl mx-auto">
-            <h3 className="font-bold text-xl mb-2 dark:text-gray-200">Search Results</h3>
-            <p className="text-gray-700 dark:text-gray-300 mb-4">{apiResponse.text}</p>
-            {apiResponse.groundingChunks.length > 0 && (
+      {(localSearchResults.length > 0 || apiResponse) && (
+        <div className="space-y-6">
+          {/* Local Search Results */}
+          {localSearchResults.length > 0 && (
+            <div className="bg-teal-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-4 md:p-6 rounded-lg shadow-md max-w-4xl mx-auto">
+              <h3 className="font-bold text-sm md:text-base mb-4 dark:text-gray-200">Local Results</h3>
+              <div className="space-y-4">
+                {localSearchResults.map((result, index) => (
+                  <div key={`${result.shop.id}-${result.product?.id || 'shop'}-${index}`} className="flex items-center justify-between p-3 bg-white/50 dark:bg-gray-700/50 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <OptimizedImage
+                        srcBase={result.shop.image.replace('-1024.webp', '')}
+                        alt={result.shop.name}
+                        className="w-12 h-12 rounded-md object-cover"
+                      />
+                      <div>
+                        <p className="font-semibold text-gray-800 dark:text-gray-200">{result.shop.name}</p>
+                        {result.type === 'product' && result.product ? (
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {result.product.name} - Ksh {result.product.price.toLocaleString()}
+                          </p>
+                        ) : (
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{result.shop.category}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm font-medium text-teal-600 dark:text-teal-400">{result.formattedDistance}</p>
+                      <button
+                        onClick={() => handleViewShop(result.shop)}
+                        className="text-xs bg-teal-500 text-white px-3 py-1 rounded-full hover:bg-teal-600 transition-colors mt-1"
+                      >
+                        View Shop
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* External API Results */}
+          {apiResponse && (
+            <div className="bg-teal-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-4 md:p-6 rounded-lg shadow-md max-w-4xl mx-auto">
+              <h3 className="font-bold text-sm md:text-base mb-2 dark:text-gray-200">Search Results</h3>
+              <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">{apiResponse.text}</p>
+              {apiResponse.groundingChunks.length > 0 && (
                 <div>
-                    <h4 className="font-semibold text-lg mb-2 dark:text-gray-200">Sources from Google Maps:</h4>
-                    <ul className="list-disc list-inside space-y-1">
-                        {apiResponse.groundingChunks.map((chunk, index) => (
-                            <li key={index}>
-                                <a href={chunk.maps.uri} target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:underline">
-                                    {chunk.maps.title}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
+                  <h4 className="font-semibold text-xs md:text-sm mb-2 dark:text-gray-200">Sources from Google Maps:</h4>
+                  <ul className="list-disc list-inside space-y-1">
+                    {apiResponse.groundingChunks.map((chunk, index) => (
+                      <li key={index}>
+                        <a href={chunk.maps.uri} target="_blank" rel="noopener noreferrer" className="text-teal-600 hover:underline text-sm md:text-base">
+                          {chunk.maps.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-            )}
+              )}
+            </div>
+          )}
         </div>
       )}
 
@@ -236,7 +466,7 @@ const CustomerView: React.FC = () => {
       
       <div>
         <div className="flex justify-between items-center mb-4">
-            <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-200">Featured Shops Nearby</h3>
+            <h3 className="text-sm md:text-base font-bold text-gray-800 dark:text-gray-200">Featured Shops Nearby</h3>
             <div className="flex space-x-2">
                 <FilterButton onClick={() => setActiveFilter('all')} isActive={activeFilter === 'all'}>All</FilterButton>
                 <FilterButton onClick={() => setActiveFilter('recommended')} isActive={activeFilter === 'recommended'}><StarIcon className="w-4 h-4"/> Recommended</FilterButton>

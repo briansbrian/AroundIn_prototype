@@ -92,13 +92,13 @@ const ShopPortfolio: React.FC<{
                 Back to Discovery
             </button>
 
-            <div className="bg-teal-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-lg overflow-hidden">
+            <div className="bg-teal-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-lg overflow-hidden">
                 <div className="relative">
                     <OptimizedImage srcBase={shop.image.replace('-1024.webp', '')} alt={shop.name} className="w-full h-48 md:h-64 object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 p-6">
-                        <h2 className="text-3xl font-bold text-white shadow-text">{shop.name}</h2>
-                        <p className="text-white text-lg font-medium shadow-text">{shop.category} &middot; {shop.rating} ★</p>
+                    <div className="absolute bottom-0 left-0 p-4 md:p-6">
+                        <h2 className="text-base md:text-lg font-bold text-white shadow-text">{shop.name}</h2>
+                        <p className="text-white text-xs md:text-sm font-medium shadow-text">{shop.category} &middot; {shop.rating} ★</p>
                     </div>
                 </div>
 
@@ -106,28 +106,28 @@ const ShopPortfolio: React.FC<{
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <button 
                             onClick={handleDirectionsClick}
-                            className="bg-teal-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-teal-600 transition-colors text-center"
+                            className="bg-teal-500 text-white font-bold py-2 md:py-3 px-4 rounded-lg hover:bg-teal-600 transition-colors text-center text-sm md:text-base"
                         >
                             Get Directions
                         </button>
                          <button 
                             onClick={handleSaveToggle}
-                            className="flex items-center justify-center gap-2 text-teal-800 dark:text-teal-200 bg-teal-500/20 hover:bg-teal-500/30 dark:bg-gray-200/10 dark:hover:bg-gray-200/20 font-bold py-3 px-4 rounded-lg transition-colors"
+                            className="flex items-center justify-center gap-2 text-teal-800 dark:text-teal-200 bg-teal-500/20 hover:bg-teal-500/30 dark:bg-gray-200/10 dark:hover:bg-gray-200/20 font-bold py-2 md:py-3 px-4 rounded-lg transition-colors text-sm md:text-base"
                         >
-                            {isSaved ? <BookmarkSquareIcon className="w-6 h-6 text-teal-600 dark:text-teal-300" /> : <BookmarkIcon className="w-6 h-6" />}
+                            {isSaved ? <BookmarkSquareIcon className="w-5 h-5 md:w-6 md:h-6 text-teal-600 dark:text-teal-300" /> : <BookmarkIcon className="w-5 h-5 md:w-6 md:h-6" />}
                             {isSaved ? 'Saved' : 'Save'}
                         </button>
                          <button 
                             onClick={() => setIsChatOpen(true)}
-                            className="flex items-center justify-center gap-2 bg-teal-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors"
+                            className="flex items-center justify-center gap-2 bg-teal-600 text-white font-bold py-2 md:py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors text-sm md:text-base"
                         >
-                            <ChatBubbleLeftRightIcon className="w-6 h-6" />
+                            <ChatBubbleLeftRightIcon className="w-5 h-5 md:w-6 md:h-6" />
                            Chat with Seller
                         </button>
                     </div>
 
                     <div>
-                        <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-600 pb-2 mb-4">Products</h3>
+                        <h3 className="text-sm md:text-base font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-600 pb-2 mb-4">Products</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {shop.products.map(product => (
                                 <div key={product.id} className="bg-teal-50/30 border border-gray-200/50 dark:bg-gray-700/30 dark:border-gray-700/50 p-3 rounded-lg flex justify-between items-center">
@@ -154,7 +154,7 @@ const ShopPortfolio: React.FC<{
                     </div>
 
                     <div>
-                        <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-600 pb-2 mb-4">Location</h3>
+                        <h3 className="text-sm md:text-base font-bold text-gray-800 dark:text-gray-200 border-b dark:border-gray-600 pb-2 mb-4">Location</h3>
                         <div className="h-64 rounded-lg overflow-hidden">
                            <ShopLocationMapPlaceholder shopName={shop.name} />
                         </div>

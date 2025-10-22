@@ -38,7 +38,7 @@ const ChatModal: React.FC<ChatModalProps> = ({ isOpen, onClose, shopName, messag
             <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200 dark:border-gray-700/50 w-full max-w-lg h-[80vh] max-h-[700px] rounded-2xl shadow-2xl flex flex-col">
                 {/* Header */}
                 <header className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700/50">
-                    <h3 className="font-bold text-lg text-gray-800 dark:text-gray-200">Chat with {shopName}</h3>
+                    <h3 className="font-bold text-base text-gray-800 dark:text-gray-200">Chat with {shopName}</h3>
                     <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-500/20">
                         <XMarkIcon className="w-6 h-6 text-gray-600 dark:text-gray-300" />
                     </button>
