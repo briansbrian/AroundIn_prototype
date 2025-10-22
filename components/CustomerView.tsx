@@ -52,46 +52,43 @@ const ShopCard: React.FC<{
 
     if (isFeatured) {
         return (
-            <div className="bg-teal-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col md:flex-row h-full">
-                <div className="md:w-1/2 relative">
-                    <OptimizedImage srcBase={srcBase} alt={shop.name} className="w-full h-48 md:h-full object-cover" />
+            <div className="bg-teal-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full relative">
+                {/* Featured Badge */}
+                <div className="absolute top-2 left-2 z-10">
+                    <div className="bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                        <StarIcon className="w-3 h-3"/>
+                        <span>FEATURED</span>
+                    </div>
                 </div>
-                <div className="p-4 flex flex-col justify-between flex-grow md:w-1/2">
-                    <div>
-                      <div className="flex justify-between items-start">
+                <OptimizedImage srcBase={srcBase} alt={shop.name} className="w-full h-32 object-cover" />
+                <div className="p-4 flex-grow">
+                    <div className="flex justify-between items-start">
                         <div className="flex items-center gap-2">
                             <div className="w-2 h-6 bg-yellow-400 rounded-full"></div>
-                            <h3 className="font-bold text-sm md:text-base text-gray-800 dark:text-gray-200">{shop.name}</h3>
+                            <h3 className="font-bold text-xs md:text-sm text-gray-800 dark:text-gray-200">{shop.name}</h3>
                         </div>
                         <span className={`text-xs font-semibold px-2 py-1 rounded-full ${categoryStyles[shop.category]}`}>{shop.category}</span>
-                      </div>
-                       <div className="flex items-center gap-2 mt-2">
-                         <div className="bg-yellow-400 text-black text-xs font-bold px-2 py-1 rounded-full flex items-center gap-1">
-                            <StarIcon className="w-3 h-3"/>
-                            <span>FEATURED</span>
-                         </div>
-                         <p className="text-sm text-gray-600 dark:text-gray-400">{shop.distance} &middot; {shop.rating} ★</p>
-                       </div>
-                      <div className="mt-4">
+                    </div>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{shop.distance} &middot; {shop.rating} ★</p>
+                    <div className="mt-4">
                         <h4 className="font-semibold text-sm text-gray-600 dark:text-gray-300 mb-2">In Stock:</h4>
                         <div className="flex flex-wrap gap-2">
-                            {shop.products.slice(0, 3).map(p => (
+                            {shop.products.slice(0, 2).map(p => (
                                 <span key={p.id} className="text-xs bg-gray-500/10 text-gray-700 dark:bg-gray-200/10 dark:text-gray-300 px-2 py-1 rounded">{p.name}</span>
                             ))}
-                            {shop.products.length > 3 && <span className="text-xs bg-gray-500/10 text-gray-700 dark:bg-gray-200/10 dark:text-gray-300 px-2 py-1 rounded">...</span>}
+                            {shop.products.length > 2 && <span className="text-xs bg-gray-500/10 text-gray-700 dark:bg-gray-200/10 dark:text-gray-300 px-2 py-1 rounded">...</span>}
                         </div>
-                      </div>
                     </div>
-                    <div className="pt-4 grid grid-cols-2 gap-2">
-                      <button onClick={() => onViewShop(shop)} className="text-teal-800 bg-teal-500/20 hover:bg-teal-500/30 dark:text-gray-200 dark:bg-gray-200/10 dark:hover:bg-gray-200/20 font-bold py-2 px-4 rounded-lg transition-colors text-sm">
-                          View Shop
-                      </button>
-                      <button 
+                </div>
+                <div className="p-4 pt-0 grid grid-cols-2 gap-2">
+                    <button onClick={() => onViewShop(shop)} className="text-teal-800 bg-teal-500/20 hover:bg-teal-500/30 dark:text-gray-200 dark:bg-gray-200/10 dark:hover:bg-gray-200/20 font-bold py-2 px-4 rounded-lg transition-colors text-sm">
+                        View Shop
+                    </button>
+                    <button 
                         onClick={() => onGetDirections(shop)} 
                         className="font-bold py-2 px-4 rounded-lg transition-colors text-sm text-white bg-teal-500 hover:bg-teal-600">
-                          Directions
-                      </button>
-                    </div>
+                        Directions
+                    </button>
                 </div>
             </div>
         )
@@ -479,7 +476,7 @@ const CustomerView: React.FC = () => {
           {filteredShops.map((shop, index) => {
              const isFeatured = index === 0 && filteredShops.length > 2;
              return (
-                <div key={shop.id} className={`${isFeatured ? 'md:col-span-2' : ''}`}>
+                <div key={shop.id}>
                     <ShopCard 
                         shop={shop} 
                         onGetDirections={handleGetDirections}
