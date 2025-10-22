@@ -4,6 +4,7 @@ import { useGeolocation } from '../hooks/useGeolocation';
 import { findNearbyPlaces } from '../services/geminiService';
 import { MOCK_SHOPS } from '../constants';
 import LoadingSpinner from './common/LoadingSpinner';
+import OptimizedImage from './common/OptimizedImage';
 import { MagnifyingGlassIcon, StarIcon } from './common/Icons';
 import ShopPortfolio from './ShopPortfolio';
 import type { Shop, GroundingChunk, GeoLocation } from '../types';
@@ -20,17 +21,12 @@ const MapPlaceholder: React.FC<{ isLoading: boolean }> = ({ isLoading }) => {
 
     return (
         <div className="relative h-64 md:h-96 w-full rounded-lg shadow-lg overflow-hidden">
-            <img 
-                src="https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?q=80&w=1974&auto=format&fit=crop" 
+            <OptimizedImage 
+                srcBase="/images/optimized/mainbar"
                 alt="Map of the local area" 
+                sizes="100vw"
                 className="w-full h-full object-cover" 
             />
-            <div className="absolute inset-0 bg-black/20 flex items-center justify-center p-4">
-                <div className="bg-white/80 backdrop-blur-sm p-4 rounded-lg text-center shadow-md">
-                    <p className="font-bold text-gray-800">Interactive Map Is a Demo Feature</p>
-                    <p className="text-sm text-gray-600">A valid Google Maps API key is required to enable the live map.</p>
-                </div>
-            </div>
         </div>
     );
 };
@@ -50,11 +46,13 @@ const ShopCard: React.FC<{
         Service: 'bg-violet-500/20 text-violet-800 dark:text-violet-300',
     };
 
+    const srcBase = shop.image.replace('-1024.webp', '');
+
     if (isFeatured) {
         return (
             <div className="bg-teal-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col md:flex-row h-full">
                 <div className="md:w-1/2 relative">
-                    <img src={shop.image} alt={shop.name} className="w-full h-48 md:h-full object-cover" />
+                    <OptimizedImage srcBase={srcBase} alt={shop.name} className="w-full h-48 md:h-full object-cover" />
                 </div>
                 <div className="p-4 flex flex-col justify-between flex-grow md:w-1/2">
                     <div>
@@ -99,7 +97,7 @@ const ShopCard: React.FC<{
 
     return (
         <div className="bg-teal-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
-            <img src={shop.image} alt={shop.name} className="w-full h-32 object-cover" />
+            <OptimizedImage srcBase={srcBase} alt={shop.name} className="w-full h-32 object-cover" />
             <div className="p-4 flex-grow">
                 <div className="flex justify-between items-start">
                     <h3 className="font-bold text-lg text-gray-800 dark:text-gray-200">{shop.name}</h3>

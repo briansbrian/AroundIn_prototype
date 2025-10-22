@@ -8,7 +8,7 @@ export const MOCK_SHOPS: Shop[] = [
     location: { latitude: -1.286389, longitude: 36.817223 },
     distance: '300m Away',
     rating: 4.5,
-    image: 'https://images.unsplash.com/photo-1582287135546-a0205835c572?q=80&w=2070&auto=format&fit=crop',
+    image: '/images/optimized/Marys_electronic-1024.webp',
     products: [
       { id: 'p1', name: 'iPhone Charger', price: 1500, stock: 15, category: 'Accessories', image: 'https://images.unsplash.com/photo-1583863762439-9a2469779a83?q=80&w=2070&auto=format&fit=crop' },
       { id: 'p2', name: 'Earphones', price: 800, stock: 5, category: 'Accessories', image: 'https://images.unsplash.com/photo-1606841638048-a428c5a2c26c?q=80&w=1932&auto=format&fit=crop' },
@@ -22,7 +22,7 @@ export const MOCK_SHOPS: Shop[] = [
     location: { latitude: -1.2855, longitude: 36.818 },
     distance: '500m Away',
     rating: 4.8,
-    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1974&auto=format&fit=crop',
+    image: '/images/optimized/Jumas_fresh-1024.webp',
     products: [
       { id: 'p4', name: 'Tomatoes (kg)', price: 120, stock: 50, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1561136594-7247da06aefb?q=80&w=2070&auto=format&fit=crop' },
       { id: 'p5', name: 'Onions (kg)', price: 100, stock: 60, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1587402922203-b09819df8787?q=80&w=1933&auto=format&fit=crop' },
@@ -36,7 +36,7 @@ export const MOCK_SHOPS: Shop[] = [
     location: { latitude: -1.287, longitude: 36.816 },
     distance: '450m Away',
     rating: 4.2,
-    image: 'https://images.unsplash.com/photo-1615365593297-36e3b5e4ff62?q=80&w=2070&auto=format&fit=crop',
+    image: '/images/optimized/General_store_B-1024.webp',
     products: [
       { id: 'p7', name: 'Soap', price: 80, stock: 40, category: 'Toiletries' },
       { id: 'p8', name: 'Cooking Oil (L)', price: 350, stock: 25, category: 'Pantry' },
@@ -49,7 +49,7 @@ export const MOCK_SHOPS: Shop[] = [
     location: { latitude: -1.2848, longitude: 36.8195 },
     distance: '650m Away',
     rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1611794522037-675e1a14b537?q=80&w=1935&auto=format&fit=crop',
+    image: '/images/optimized/Ankara_styles-1024.webp',
     products: [
       { id: 'p11', name: 'Custom Kitenge Dress', price: 4500, stock: 10, category: 'Apparel' },
       { id: 'p12', name: "Men's Casual Shirt", price: 2500, stock: 20, category: 'Apparel' },
@@ -63,7 +63,7 @@ export const MOCK_SHOPS: Shop[] = [
     location: { latitude: -1.2881, longitude: 36.8155 },
     distance: '700m Away',
     rating: 4.6,
-    image: 'https://images.unsplash.com/photo-1568502947101-d9b9d3a78b56?q=80&w=1932&auto=format&fit=crop',
+    image: '/images/optimized/Kazi_moto-1024.webp',
     products: [
       { id: 's1', name: 'Oil Change', price: 500, stock: 999, category: 'Maintenance' },
       { id: 's2', name: 'Puncture Repair', price: 200, stock: 999, category: 'Tires' },
@@ -77,7 +77,7 @@ export const MOCK_SHOPS: Shop[] = [
     location: { latitude: -1.2850, longitude: 36.8160 },
     distance: '250m Away',
     rating: 4.7,
-    image: 'https://images.unsplash.com/photo-1604594877563-645c3d4f04a8?q=80&w=2070&auto=format&fit=crop',
+    image: '/images/optimized/PesaPoint-1024.webp',
     products: [
       { id: 's6', name: 'Deposit Funds', price: 0, stock: 999, category: 'Transactions' },
       { id: 's7', name: 'Withdraw Funds', price: 0, stock: 999, category: 'Transactions' },
@@ -91,7 +91,7 @@ export const MOCK_SHOPS: Shop[] = [
     location: { latitude: -1.2875, longitude: 36.8185 },
     distance: '800m Away',
     rating: 4.8,
-    image: 'https://images.unsplash.com/photo-1622288334053-8f0a38f31284?q=80&w=1974&auto=format&fit=crop',
+    image: '/images/optimized/Fresh_cuts-1024.webp',
     products: [
       { id: 's11', name: 'Standard Haircut', price: 300, stock: 999, category: 'Hair' },
       { id: 's12', name: 'Beard Trim & Shape-up', price: 200, stock: 999, category: 'Grooming' },
@@ -104,7 +104,7 @@ export const SHOP_TEMPLATES: ShopTemplate[] = [
     {
         name: "Electronics Kiosk",
         category: 'Electronics',
-        image: 'https://images.unsplash.com/photo-1582287135546-a0205835c572?q=80&w=2070&auto=format&fit=crop',
+        image: '/images/optimized/Marys_electronic-1024.webp',
         description: 'A fully-stocked kiosk with the latest mobile accessories and gadgets.',
         products: [
             { id: 'p1', name: 'iPhone Charger', price: 1500, stock: 15, category: 'Accessories', image: 'https://images.unsplash.com/photo-1583863762439-9a2469779a83?q=80&w=2070&auto=format&fit=crop' },
@@ -117,7 +117,7 @@ export const SHOP_TEMPLATES: ShopTemplate[] = [
     {
         name: "Fresh Grocery Store",
         category: 'Food',
-        image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=1974&auto=format&fit=crop',
+        image: '/images/optimized/Jumas_fresh-1024.webp',
         description: 'Your neighborhood source for fresh, locally-sourced fruits and vegetables.',
         products: [
             { id: 'p6', name: 'Tomatoes (kg)', price: 120, stock: 50, category: 'Vegetables', image: 'https://images.unsplash.com/photo-1561136594-7247da06aefb?q=80&w=2070&auto=format&fit=crop' },
@@ -130,7 +130,7 @@ export const SHOP_TEMPLATES: ShopTemplate[] = [
     {
         name: "Ankara Styles by Fenna",
         category: 'General',
-        image: 'https://images.unsplash.com/photo-1611794522037-675e1a14b537?q=80&w=1935&auto=format&fit=crop',
+        image: '/images/optimized/Ankara_styles-1024.webp',
         description: 'Custom-made ankara outfits, dresses, and accessories for all occasions.',
         products: [
             { id: 'p11', name: 'Custom Kitenge Dress', price: 4500, stock: 10, category: 'Apparel' },
@@ -143,7 +143,7 @@ export const SHOP_TEMPLATES: ShopTemplate[] = [
     {
         name: "Kazi Moto Boda Repair",
         category: 'Service',
-        image: 'https://images.unsplash.com/photo-1568502947101-d9b9d3a78b56?q=80&w=1932&auto=format&fit=crop',
+        image: '/images/optimized/Kazi_moto-1024.webp',
         description: 'Fast and reliable repairs for all motorbike models. Oil changes, tire punctures, and engine checks.',
         products: [
             { id: 's1', name: 'Oil Change', price: 500, stock: 999, category: 'Maintenance' },
@@ -156,7 +156,7 @@ export const SHOP_TEMPLATES: ShopTemplate[] = [
     {
         name: "PesaPoint M-Pesa",
         category: 'Service',
-        image: 'https://images.unsplash.com/photo-1604594877563-645c3d4f04a8?q=80&w=2070&auto=format&fit=crop',
+        image: '/images/optimized/PesaPoint-1024.webp',
         description: 'Your convenient spot for M-Pesa deposits, withdrawals, and bill payments.',
         products: [
             { id: 's6', name: 'Deposit Funds', price: 0, stock: 999, category: 'Transactions' },
@@ -169,7 +169,7 @@ export const SHOP_TEMPLATES: ShopTemplate[] = [
     {
         name: "Fresh Cuts Barbershop",
         category: 'Service',
-        image: 'https://images.unsplash.com/photo-1622288334053-8f0a38f31284?q=80&w=1974&auto=format&fit=crop',
+        image: '/images/optimized/Fresh_cuts-1024.webp',
         description: 'Sharp haircuts, clean shaves, and professional grooming for the modern gentleman.',
         products: [
             { id: 's11', name: 'Standard Haircut', price: 300, stock: 999, category: 'Hair' },

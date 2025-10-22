@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import type { Shop, GeoLocation, ChatMessage, Product } from '../types';
+import OptimizedImage from './common/OptimizedImage';
 import { ArrowLeftIcon, BookmarkIcon, BookmarkSquareIcon, MapPinIcon, ChatBubbleLeftRightIcon, TagIcon } from './common/Icons';
 import ChatModal from './common/ChatModal';
 
@@ -93,7 +94,7 @@ const ShopPortfolio: React.FC<{
 
             <div className="bg-teal-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-lg overflow-hidden">
                 <div className="relative">
-                    <img src={shop.image} alt={shop.name} className="w-full h-48 md:h-64 object-cover" />
+                    <OptimizedImage srcBase={shop.image.replace('-1024.webp', '')} alt={shop.name} className="w-full h-48 md:h-64 object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-0 left-0 p-6">
                         <h2 className="text-3xl font-bold text-white shadow-text">{shop.name}</h2>

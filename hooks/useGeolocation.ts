@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { GeoLocation } from '../types';
 
 interface GeolocationState {
@@ -9,43 +9,12 @@ interface GeolocationState {
 }
 
 export const useGeolocation = () => {
-  const [state, setState] = useState<GeolocationState>({
+  // Do NOT request browser location to avoid permission prompt
+  const [state] = useState<GeolocationState>({
     location: null,
-    loading: true,
+    loading: false,
     error: null,
   });
-
-  useEffect(() => {
-    if (!navigator.geolocation) {
-      setState({
-        location: null,
-        loading: false,
-        error: 'Geolocation is not supported by your browser.',
-      });
-      return;
-    }
-
-    const onSuccess = (position: GeolocationPosition) => {
-      setState({
-        location: {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        },
-        loading: false,
-        error: null,
-      });
-    };
-
-    const onError = (error: GeolocationPositionError) => {
-      setState({
-        location: null,
-        loading: false,
-        error: error.message,
-      });
-    };
-
-    navigator.geolocation.getCurrentPosition(onSuccess, onError);
-  }, []);
 
   return state;
 };

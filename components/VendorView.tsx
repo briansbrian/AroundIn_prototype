@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { SHOP_TEMPLATES } from '../constants';
+import OptimizedImage from './common/OptimizedImage';
 import type { Product, Shop, ShopTemplate } from '../types';
 import { XMarkIcon, ArrowPathIcon } from './common/Icons';
 
@@ -175,9 +176,11 @@ const VendorDashboard: React.FC<{ shop: Shop; onReset: () => void }> = ({ shop, 
     );
 };
 
-const TemplateCard: React.FC<{ template: ShopTemplate; onCreate: () => void; }> = ({ template, onCreate }) => (
+const TemplateCard: React.FC<{ template: ShopTemplate; onCreate: () => void; }> = ({ template, onCreate }) => {
+    const srcBase = template.image.replace('-1024.webp', '');
+    return (
     <div className="bg-green-50/60 dark:bg-gray-800/60 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-md overflow-hidden flex flex-col hover:shadow-xl transition-shadow duration-300">
-        <img src={template.image} alt={template.name} className="w-full h-40 object-cover" />
+        <OptimizedImage srcBase={srcBase} alt={template.name} className="w-full h-40 object-cover" />
         <div className="p-4 flex flex-col flex-grow">
             <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200">{template.name}</h3>
             <p className="text-gray-600 dark:text-gray-400 mt-2 text-sm flex-grow">{template.description}</p>
@@ -191,7 +194,8 @@ const TemplateCard: React.FC<{ template: ShopTemplate; onCreate: () => void; }> 
             </button>
         </div>
     </div>
-);
+    );
+};
 
 const ShopCreator: React.FC<{ onCreateShop: (template: ShopTemplate) => void }> = ({ onCreateShop }) => {
     return (
