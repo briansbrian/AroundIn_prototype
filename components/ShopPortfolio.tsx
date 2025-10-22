@@ -1,6 +1,9 @@
 
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useGeolocation } from '../hooks/useGeolocation';
+import { MOCK_SHOPS } from '../constants';
 import type { Shop, GeoLocation, ChatMessage, Product } from '../types';
 import OptimizedImage from './common/OptimizedImage';
 import { ArrowLeftIcon, BookmarkIcon, BookmarkSquareIcon, MapPinIcon, ChatBubbleLeftRightIcon, TagIcon } from './common/Icons';
@@ -26,15 +29,17 @@ const ShopLocationMapPlaceholder: React.FC<{ shopName: string }> = ({ shopName }
     );
 };
 
-const ShopPortfolio: React.FC<{
-    shop: Shop;
-    userLocation: GeoLocation | null;
-    onBack: () => void;
-}> = ({ shop, userLocation, onBack }) => {
-    const [isSaved, setIsSaved] = useState(shop.isSaved || false);
+const ShopPortfolio: React.FC = () => {
+    const { shopId } = useParams<{ shopId: string }>();
+    const navigate = useNavigate();
+    const { location: userLocation } = useGeolocation();
+
+    const shop = MOCK_SHOPS.find(s => s.id === shopId);
+
+    const [isSaved, setIsSaved] = useState(shop?.isSaved || false);
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [messages, setMessages] = useState<ChatMessage[]>([
-        { id: '1', type: 'text', text: `Hi! Welcome to ${shop.name}. How can I help you today?`, sender: 'seller' }
+        { id: '1', type: 'text', text: `Hi! Welcome to ${shop?.name || 'our shop'}. How can I help you today?`, sender: 'seller' }
     ]);
 
     const handleSaveToggle = () => {
@@ -42,7 +47,7 @@ const ShopPortfolio: React.FC<{
     };
 
     const handleDirectionsClick = () => {
-       if (userLocation) {
+       if (userLocation && shop) {
             const origin = `${userLocation.latitude},${userLocation.longitude}`;
             const destination = `${shop.location.latitude},${shop.location.longitude}`;
             const url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}`;
@@ -72,7 +77,7 @@ const ShopPortfolio: React.FC<{
             setMessages(prev => [...prev, response]);
         }, 1500);
     };
-    
+
     const handleTagProduct = (product: Product) => {
         const newTagMessage: ChatMessage = {
             id: new Date().toISOString(),
@@ -84,10 +89,29 @@ const ShopPortfolio: React.FC<{
         setIsChatOpen(true); // Open chat when an item is tagged
     };
 
+    const handleBack = () => {
+        navigate('/');
+    };
+
+    if (!shop) {
+        return (
+            <div className="text-center py-12">
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">Shop Not Found</h2>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">The shop you're looking for doesn't exist.</p>
+                <button
+                    onClick={handleBack}
+                    className="bg-teal-500 text-white px-6 py-2 rounded-lg hover:bg-teal-600 transition-colors"
+                >
+                    Back to Home
+                </button>
+            </div>
+        );
+    }
+
 
     return (
         <div className="animate-fade-in">
-            <button onClick={onBack} className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white mb-4 font-medium">
+            <button onClick={handleBack} className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white mb-4 font-medium">
                 <ArrowLeftIcon className="w-5 h-5" />
                 Back to Discovery
             </button>

@@ -1,12 +1,12 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGeolocation } from '../hooks/useGeolocation';
 import { findNearbyPlaces } from '../services/geminiService';
 import { MOCK_SHOPS } from '../constants';
 import LoadingSpinner from './common/LoadingSpinner';
 import OptimizedImage from './common/OptimizedImage';
 import { MagnifyingGlassIcon, StarIcon, XMarkIcon, BookmarkIcon, BookmarkSquareIcon } from './common/Icons';
-import ShopPortfolio from './ShopPortfolio';
 import type { Shop, GroundingChunk, GeoLocation } from '../types';
 import { searchLocalData, type LocalSearchResult, calculateDistance } from '../lib/searchUtils';
 
@@ -141,12 +141,12 @@ const FilterButton: React.FC<{
 );
 
 const CustomerView: React.FC = () => {
+  const navigate = useNavigate();
   const { location, loading: geoLoading, error: geoError } = useGeolocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apiResponse, setApiResponse] = useState<{ text: string; groundingChunks: GroundingChunk[] } | null>(null);
   const [localSearchResults, setLocalSearchResults] = useState<LocalSearchResult[]>([]);
-  const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
   const [savedShops, setSavedShops] = useState<Set<string>>(new Set());
   const [activeFilter, setActiveFilter] = useState<'all' | 'recommended' | Shop['category']>('all');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -223,10 +223,7 @@ const CustomerView: React.FC = () => {
 
   // Handle suggestion selection
   const handleSuggestionSelect = (shop: Shop) => {
-    setSearchQuery(shop.name);
-    setShowSuggestions(false);
-    setSelectedSuggestionIndex(-1);
-    setSelectedShop(shop);
+    navigate(`/shop/${shop.id}`);
   };
 
   // Handle clicking outside to close suggestions
@@ -275,13 +272,13 @@ const CustomerView: React.FC = () => {
   }, [searchQuery, location]);
 
   const handleViewShop = (shop: Shop) => {
-      setSelectedShop(shop);
+      navigate(`/shop/${shop.id}`);
   };
-  
+
   // Both Directions and View Shop now navigate to the portfolio
   const handleGetDirections = useCallback((shop: Shop) => {
-    setSelectedShop(shop);
-  }, []);
+    navigate(`/shop/${shop.id}`);
+  }, [navigate]);
 
 
   const handleClearSearch = useCallback(() => {
@@ -292,19 +289,11 @@ const CustomerView: React.FC = () => {
     setSelectedSuggestionIndex(-1);
   }, []);
 
-  const handleBackToDiscovery = () => {
-      setSelectedShop(null);
-  };
-
   const filteredShops = MOCK_SHOPS.filter(shop => {
     if (activeFilter === 'all') return true;
     if (activeFilter === 'recommended') return shop.rating >= 4.5;
     return shop.category === activeFilter;
   });
-
-  if (selectedShop) {
-      return <ShopPortfolio shop={selectedShop} userLocation={location} onBack={handleBackToDiscovery} />;
-  }
   
   return (
     <div className="space-y-6">
