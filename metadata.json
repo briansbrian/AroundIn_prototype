@@ -1,0 +1,7 @@
+{
+  "name": "Aroundin: Hyperlocal Marketplace",
+  "description": "A unified web app for customers to discover local shops and for vendors to manage their business, powered by an interactive map and real-time data.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
