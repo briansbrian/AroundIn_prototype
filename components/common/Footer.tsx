@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
                     <div>
                         <h3 className="text-base font-bold text-gray-800 dark:text-white mb-2">Quick Links</h3>
                         <ul className="space-y-2 text-xs">
-                            <li><a href="/?role=vendor" className="text-left hover:text-teal-500 transition-colors">For Vendors</a></li>
+                            <li><button onClick={() => window.location.href = '/vendor'} className="text-left hover:text-teal-500 transition-colors">For Vendors</button></li>
                             <li><a href="#" className="hover:text-teal-500 transition-colors">Help Center</a></li>
                             <li><a href="#" className="hover:text-teal-500 transition-colors">Guide on how to enroll documentation</a></li>
                             <li><a href="#" className="hover:text-teal-500 transition-colors">Terms of Service</a></li>

@@ -303,7 +303,7 @@ const CustomerView: React.FC = () => {
       </div>
 
       <div className="sticky top-[70px] bg-transparent z-10 py-4">
-        <div className="relative max-w-2xl mx-auto">
+        <div className="relative max-w-2xl mx-auto px-4 md:px-0">
           <input
             ref={searchInputRef}
             type="text"
@@ -334,7 +334,7 @@ const CustomerView: React.FC = () => {
           {showSuggestions && suggestions.length > 0 && (
             <div
               ref={suggestionsRef}
-              className="absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-lg max-h-64 overflow-y-auto z-20"
+              className="absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 rounded-lg shadow-lg max-h-64 overflow-y-auto z-20 max-w-2xl mx-auto"
             >
               {suggestions.map((shop, index) => (
                 <button
@@ -453,7 +453,7 @@ const CustomerView: React.FC = () => {
       <div>
         <div className="flex justify-between items-center mb-4">
             <h3 className="text-sm md:text-base font-bold text-gray-800 dark:text-gray-200">Featured Shops Nearby</h3>
-            <div className="flex space-x-2">
+            <div className="flex space-x-2 overflow-x-auto pb-1">
                 <FilterButton onClick={() => setActiveFilter('all')} isActive={activeFilter === 'all'}>All</FilterButton>
                 <FilterButton onClick={() => setActiveFilter('recommended')} isActive={activeFilter === 'recommended'}><StarIcon className="w-4 h-4"/> Recommended</FilterButton>
                 <FilterButton onClick={() => setActiveFilter('Electronics')} isActive={activeFilter === 'Electronics'}>Electronics</FilterButton>
@@ -461,7 +461,7 @@ const CustomerView: React.FC = () => {
                 <FilterButton onClick={() => setActiveFilter('Service')} isActive={activeFilter === 'Service'}>Services</FilterButton>
             </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-7xl mx-auto">
           {filteredShops.map((shop, index) => {
              const isFeatured = index === 0 && filteredShops.length > 2;
              return (

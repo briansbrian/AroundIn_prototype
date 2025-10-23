@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { SHOP_TEMPLATES } from '../constants';
 import OptimizedImage from './common/OptimizedImage';
 import type { Product, Shop, ShopTemplate } from '../types';
-import { XMarkIcon, ArrowPathIcon } from './common/Icons';
+import { XMarkIcon, ArrowPathIcon, ChatBubbleLeftRightIcon, MagnifyingGlassIcon, TagIcon, UserIcon } from './common/Icons';
 
 // Helper to generate random coordinates for the prototype
 const generateRandomCoordinates = (centerLat: number, centerLng: number, radiusInMeters: number) => {
@@ -137,6 +137,117 @@ const LowStockAlert = () => {
     )
 }
 
+const ChatAnalytics: React.FC = () => {
+    const recentChats = [
+        { id: '1', customer: 'John D.', message: 'Hi, do you have wireless earphones in stock?', time: '2 min ago', unread: true },
+        { id: '2', customer: 'Sarah M.', message: 'What\'s the price of the gaming mouse?', time: '15 min ago', unread: false },
+        { id: '3', customer: 'Mike R.', message: 'Can you deliver to Westlands?', time: '1 hour ago', unread: false },
+        { id: '4', customer: 'Emma K.', message: 'Are your products original?', time: '2 hours ago', unread: false },
+    ];
+
+    return (
+        <div className="bg-green-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-6 rounded-lg shadow">
+            <div className="flex items-center gap-2 mb-4">
+                <ChatBubbleLeftRightIcon className="w-5 h-5 text-teal-600" />
+                <h3 className="text-base md:text-lg font-bold dark:text-gray-200">Customer Chats</h3>
+            </div>
+            <div className="space-y-3">
+                {recentChats.map(chat => (
+                    <div key={chat.id} className={`p-3 rounded-lg border ${chat.unread ? 'bg-teal-50/50 dark:bg-teal-900/20 border-teal-200 dark:border-teal-700' : 'bg-gray-50/50 dark:bg-gray-700/30 border-gray-200 dark:border-gray-600'}`}>
+                        <div className="flex justify-between items-start mb-1">
+                            <p className="font-semibold text-sm text-gray-800 dark:text-gray-200">{chat.customer}</p>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">{chat.time}</span>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{chat.message}</p>
+                        {chat.unread && <span className="inline-block w-2 h-2 bg-teal-500 rounded-full mt-1"></span>}
+                    </div>
+                ))}
+            </div>
+            <button className="w-full mt-4 bg-teal-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-600 transition-colors text-sm">
+                View All Messages
+            </button>
+        </div>
+    );
+};
+
+const SearchAnalytics: React.FC = () => {
+    const searchStats = [
+        { period: 'Today', searches: 47, change: '+12%', trend: 'up' },
+        { period: 'This Week', searches: 284, change: '+8%', trend: 'up' },
+        { period: 'This Month', searches: 1247, change: '+15%', trend: 'up' },
+    ];
+
+    return (
+        <div className="bg-green-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-6 rounded-lg shadow">
+            <div className="flex items-center gap-2 mb-4">
+                <MagnifyingGlassIcon className="w-5 h-5 text-teal-600" />
+                <h3 className="text-base md:text-lg font-bold dark:text-gray-200">Search Analytics</h3>
+            </div>
+            <div className="space-y-4">
+                {searchStats.map(stat => (
+                    <div key={stat.period} className="flex justify-between items-center p-3 bg-gray-50/50 dark:bg-gray-700/30 rounded-lg">
+                        <div>
+                            <p className="font-semibold text-sm text-gray-800 dark:text-gray-200">{stat.period}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{stat.searches} searches</p>
+                        </div>
+                        <span className={`text-sm font-bold ${stat.trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+                            {stat.change}
+                        </span>
+                    </div>
+                ))}
+            </div>
+            <div className="mt-4 p-3 bg-teal-50/50 dark:bg-teal-900/20 rounded-lg">
+                <p className="text-sm font-semibold text-teal-800 dark:text-teal-200">Top Search Terms</p>
+                <div className="flex flex-wrap gap-2 mt-2">
+                    <span className="text-xs bg-teal-200/50 dark:bg-teal-700/50 text-teal-800 dark:text-teal-200 px-2 py-1 rounded">wireless earphones</span>
+                    <span className="text-xs bg-teal-200/50 dark:bg-teal-700/50 text-teal-800 dark:text-teal-200 px-2 py-1 rounded">gaming mouse</span>
+                    <span className="text-xs bg-teal-200/50 dark:bg-teal-700/50 text-teal-800 dark:text-teal-200 px-2 py-1 rounded">laptop stand</span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const FeatureAnalytics: React.FC = () => {
+    const features = [
+        { name: 'Product Images', usage: 89, color: 'bg-blue-500' },
+        { name: 'Price Display', usage: 76, color: 'bg-green-500' },
+        { name: 'Location Info', usage: 65, color: 'bg-yellow-500' },
+        { name: 'Contact Button', usage: 54, color: 'bg-purple-500' },
+        { name: 'Reviews', usage: 43, color: 'bg-red-500' },
+    ];
+
+    return (
+        <div className="bg-green-50/90 dark:bg-gray-800/90 backdrop-blur-lg border border-gray-200 dark:border-gray-700/50 p-6 rounded-lg shadow">
+            <div className="flex items-center gap-2 mb-4">
+                <TagIcon className="w-5 h-5 text-teal-600" />
+                <h3 className="text-base md:text-lg font-bold dark:text-gray-200">Feature Usage</h3>
+            </div>
+            <div className="space-y-4">
+                {features.map(feature => (
+                    <div key={feature.name} className="space-y-2">
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{feature.name}</span>
+                            <span className="text-sm font-bold text-gray-800 dark:text-gray-200">{feature.usage}%</span>
+                        </div>
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div 
+                                className={`h-2 rounded-full ${feature.color}`} 
+                                style={{ width: `${feature.usage}%` }}
+                            ></div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <div className="mt-4 p-3 bg-gray-50/50 dark:bg-gray-700/30 rounded-lg">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <strong>Insight:</strong> Product images drive 89% of customer engagement. Consider adding more high-quality images to boost conversions.
+                </p>
+            </div>
+        </div>
+    );
+};
+
 const VendorDashboard: React.FC<{ shop: Shop; onReset: () => void }> = ({ shop, onReset }) => {
     return (
         <div className="space-y-6 animate-fade-in">
@@ -171,6 +282,15 @@ const VendorDashboard: React.FC<{ shop: Shop; onReset: () => void }> = ({ shop, 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <InventoryManager initialProducts={shop.products} />
                 <OrderList />
+            </div>
+
+            <div className="mt-8">
+                <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-6">Analytics & Insights</h3>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <ChatAnalytics />
+                    <SearchAnalytics />
+                    <FeatureAnalytics />
+                </div>
             </div>
         </div>
     );
