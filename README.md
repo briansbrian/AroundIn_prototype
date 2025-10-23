@@ -1,6 +1,7 @@
 <div align="center">
 
-<img width="727" height="485" alt="Aroundin_logo" src="https://github.com/user-attachments/assets/e3e970b4-e9ee-479e-bb3b-58e80985b5e4" />
+<img width="612" height="408" alt="Aroundin_logo2" src="https://github.com/user-attachments/assets/f2c9dbfc-906a-426c-8bca-84b1d321be65" />
+
 
 </div>
 # AroundIn
