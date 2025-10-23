@@ -45,23 +45,8 @@ AroundIn is a hyperlocal marketplace web application that helps customers discov
 
 ---
 
-## App Structure (important files & folders)
-
-- index.html — app entry HTML
-- index.tsx — client entry (referenced from index.html)
-- src/ — React source files and components
-- public/
-  - image.png — dashboard screenshot (keep here so it’s included in dist)
-  - aroundinlogo.png — app logo (keep here so it’s included in dist)
-  - _redirects — (optional) SPA redirect file to ensure client-side routes work on Netlify
-- vite.config.ts — Vite configuration (reads env like GEMINI_API_KEY)
-- package.json — scripts: dev, build, preview, etc.
-
----
-
 
 ## Contact
 
 Maintainer: briansbrian
-
-If you'd like, replace `<LIVE_URL_HERE>` above with your actual production URL and this README will immediately show the live demo link.
+Email : briansaddress5@gmail.com
