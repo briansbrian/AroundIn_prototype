@@ -18,8 +18,9 @@ AroundIn is a hyperlocal marketplace web application that helps customers discov
 
 ## Dashboard Screenshot
 
-![App Dashboard](<img width="1511" height="858" alt="image" src="https://github.com/user-attachments/assets/4944de28-973d-4454-8308-2b38c4f760ea" />
-)
+![App Dashboard]
+<img width="1511" height="858" alt="Screenshot 2025-10-23 at 16-15-28 Aroundin Hyperlocal Marketplace" src="https://github.com/user-attachments/assets/63332121-a11c-4c04-b8bc-58bda20ce046" />
+
 
 ---
 
